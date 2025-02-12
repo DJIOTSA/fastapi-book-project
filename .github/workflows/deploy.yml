@@ -17,9 +17,26 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd fastapi-book-project
+            set -e  # Exit on error
+            
+            echo "Navigating to the project directory..."
+            cd fastapi-book-project || exit 1
+            
+            echo "Fetching latest changes..."
+            git reset --hard
             git pull origin main
+            
+            echo "Stopping and removing old containers..."
+            docker stop fastapi-app || true
+            docker rm fastapi-app || true
+            
+            echo "Building the new Docker image..."
             docker build -t fastapi-app .
-            docker stop $(docker ps -q)
-            docker run -d -p 8000:8000 fastapi-app
+            
+            echo "Running the new container..."
+            docker run -d --name fastapi-app -p 8000:8000 fastapi-app
+            
+            echo "Restarting Nginx..."
             sudo systemctl restart nginx
+            
+            echo "Deployment completed successfully!"
