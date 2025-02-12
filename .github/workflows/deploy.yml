@@ -22,5 +22,5 @@ jobs:
             docker build -t fastapi-app .
             docker stop $(docker ps -q)
             docker run -d -p 8000:8000 fastapi-app
-            docker exec trusting_driscoll alembic upgrade head
+            docker exec fastapi-app alembic upgrade head
             sudo systemctl restart nginx
