@@ -1,14 +1,17 @@
+# Use lightweight Python base image
 FROM python:3.9-slim
 
 WORKDIR /app
+
+# Install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
 COPY . .
 
-# Install Nginx
-RUN apt-get update && apt-get install -y nginx
-COPY nginx.conf /etc/nginx/nginx.conf
+# Expose FastAPI's default port
+EXPOSE 8000
 
-EXPOSE 80
-
-CMD service nginx start && uvicorn main:app --host 0.0.0.0 --port 8000
+# Start FastAPI server
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
