@@ -26,6 +26,7 @@ jobs:
             git reset --hard
             git pull origin main
             
+            
             echo "Stopping and removing old containers..."
             docker stop fastapi-app || true
             docker rm fastapi-app || true
