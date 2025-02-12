@@ -23,18 +23,18 @@ jobs:
             cd fastapi-book-project || exit 1
             
             echo "Fetching latest changes..."
-            sudo git reset --hard
-            sudo git pull origin main
+            git reset --hard
+            git pull origin main
             
             echo "Stopping and removing old containers..."
-            sudo docker stop fastapi-app || true
-            sudo docker rm fastapi-app || true
+            docker stop fastapi-app || true
+            docker rm fastapi-app || true
             
             echo "Building the new Docker image..."
-            sudo docker build -t fastapi-app .
+            docker build -t fastapi-app .
             
             echo "Running the new container..."
-            sudo docker run -d --name fastapi-app -p 8000:8000 fastapi-app
+            docker run -d --name fastapi-app -p 8000:8000 fastapi-app
             
             echo "Restarting Nginx..."
             sudo systemctl restart nginx
